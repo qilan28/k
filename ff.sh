@@ -87,7 +87,7 @@ export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
 sleep 3
 
 # 启动Firefox（不使用kiosk模式，使用普通模式）
-firefox --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com &
+firefox --name=ff --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com &
 EOF
 
 chmod +x /home/vncuser/.fluxbox/startup
@@ -158,7 +158,7 @@ else
     export LANG=zh_CN.UTF-8
     export LANGUAGE=zh_CN:zh
     export LC_ALL=zh_CN.UTF-8
-    firefox --display=:0 --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com >/dev/null 2>&1 &
+    firefox --name=ff --display=:0 --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com >/dev/null 2>&1 &
     sleep 5
     FIREFOX_PID=$(pgrep -f firefox || true)
     if [ -n "$FIREFOX_PID" ]; then
@@ -189,7 +189,7 @@ while true; do
     # 如果Firefox退出，尝试重新启动
     if ! pgrep -f firefox > /dev/null; then
         echo "⚠️  Firefox 已停止，尝试重新启动..."
-        firefox --display=:0 --width=${VNC_WIDTH} --height=${VNC_HEIGHT} >/dev/null 2>&1 &
+        firefox --name=ff --display=:0 --width=${VNC_WIDTH} --height=${VNC_HEIGHT} >/dev/null 2>&1 &
         sleep 5
     fi
     
