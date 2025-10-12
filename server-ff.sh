@@ -4,7 +4,7 @@ wget -O "ff.py" "https://raw.githubusercontent.com/qilan28/k/refs/heads/main/ff.
 # source /opt/venv/bin/activate
 # nohup python /data/app.py > /data/app.log 2>&1 &
 # nohup python /data/app.py > /dev/null 2>&1 &
-python ff.py >
+python ff.py
 # echo "等待60秒"
 # sleep 60
 # ./ff.sh
