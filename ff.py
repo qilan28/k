@@ -11,7 +11,7 @@ import re
 import pytz
 
 
-BACKUP_TIME = os.environ.get('BACKUP_TIME', '10800')# 备份时间 10800秒 2小时
+BACKUP_TIME = os.environ.get('BACKUP_TIME', '120')# 备份时间 10800秒 2小时
 
 HF_USER1 = os.environ.get('HF_USER1', '')# HF 备份仓库的用户名
 HF_REPO	= os.environ.get('HF_REPO', '')#HF 备份的Models仓库名
@@ -124,9 +124,9 @@ def github(type):
         latest_package = get_latest_local_package(f'/data/{HF_REPO}')
         print(f"最新压缩包路径: {latest_package}")
         # tar -xzvf /data/firefox/1760199222945.tar.gz -C /data
-        os.system(f"tar -xzvf {latest_package} -C /data")
-        os.system("mv /data/home/vncuser /home")
-        os.system("rm -rf /data/vncuser")
+        # os.system(f"tar -xzvf {latest_package} -C /data")
+        # os.system("mv /data/home/vncuser /home")
+        # os.system("rm -rf /data/vncuser")
     os.chdir(f'/data/{HF_REPO}')
     if type == 2:
         print("开始备份上传HF")
