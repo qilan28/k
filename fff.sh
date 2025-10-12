@@ -88,7 +88,7 @@ github() {
     
     if [ "$type" = "1" ]; then
         echo "清理旧文件..."
-        rm -rf "/data/${HF_REPO}" "/home/vncuser" "/data/data"
+        rm -rf "/data/${HF_REPO}" "/data/ff" 
     fi
     
     if [ ! -d "/data/${HF_REPO}" ]; then
@@ -115,27 +115,27 @@ github() {
                 # 检查解压后的目录结构
                 echo "检查解压结果:"
                 ls -la /data/
-                if [ -d "/data/home" ]; then
-                    ls -la /data/home/
+                if [ -d "/data/data/ff" ]; then
+                    ls -la /data/data/ff
                 fi
                 
-                if [ -d "/data/home/vncuser" ]; then
-                    mv /data/home/vncuser /home/
+                if [ -d "/data/data/ff" ]; then
+                    mv /data/data/ff /data/
                     echo "移动vncuser完成"
-                elif [ -d "/data/vncuser" ]; then
-                    mv /data/vncuser /home/
+                elif [ -d "/data/ff" ]; then
+                    # mv /data/data/ff /data/
                     echo "移动vncuser完成"
                 else
                     echo "警告: 未找到vncuser目录，创建空目录"
-                    mkdir -p /home/vncuser
+                    mkdir -p /data/ff
                 fi
             else
                 echo "解压失败"
             fi
-            rm -rf /data/vncuser 2>/dev/null
+            rm -rf /data/data 2>/dev/null
         else
             echo "没有找到可用的压缩包，创建空的vncuser目录"
-            mkdir -p /home/vncuser
+            mkdir -p /data/ff
         fi
     fi
     
@@ -145,12 +145,12 @@ github() {
         echo "开始备份上传HF"
         # 备份上传仓库
         local new_archive_info
-        new_archive_info=$(compress_folder "/home/vncuser" "/data/${HF_REPO}")
+        new_archive_info=$(compress_folder "/data/ff" "/data/${HF_REPO}")
         if [ $? -eq 0 ] && [ -n "$new_archive_info" ]; then
             # 使用 | 分隔符分割信息
             IFS='|' read -r archive_name file_size formatted_time <<< "$new_archive_info"
             
-            local commit_message="${archive_name} 压缩大小：${file_size} MB 压缩时间：${formatted_time}"
+            local commit_message="大小：${file_size} MB 压缩时间：${formatted_time}"
             echo "提交信息: $commit_message"
             
             git add .
@@ -269,3 +269,4 @@ main() {
 
 # 启动主程序
 main "$@"
+# github "1"
