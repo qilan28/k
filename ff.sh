@@ -6,39 +6,39 @@ export VNC_PASSWORD=${VNC_PASSWORD:-"123456"}
 export RESOLUTION=${RESOLUTION:-"1280x720"}
 export LANG=${LANG:-"zh_CN.UTF-8"}
 export DISPLAY=:0
-export HOME=/data/ff
+export HOME=/app/ff
 export USER=vncuser
-export TMPDIR=/data/ff/tmp
+export TMPDIR=/app/ff/tmp
 
 # 设置中文环境
 export LC_ALL=$LANG
 export LANGUAGE=zh_CN:zh
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
-mkdir -p /data/ff
+mkdir -p /app/ff
 # 创建必要目录
-mkdir -p /data/ff/.vnc
-mkdir -p /data/ff/.fluxbox
-mkdir -p /data/ff/tmp
+mkdir -p /app/ff/.vnc
+mkdir -p /app/ff/.fluxbox
+mkdir -p /app/ff/tmp
 mkdir -p /tmp/.X11-unix
-mkdir -p /data/ff/.mozilla/firefox
+mkdir -p /app/ff/.mozilla/firefox
 mkdir -p /var/run/dbus
 
 # 设置权限
-chmod 700 /data/ff/.vnc
+chmod 700 /app/ff/.vnc
 chmod 1777 /tmp/.X11-unix
-chmod 700 /data/ff/tmp
+chmod 700 /app/ff/tmp
 chmod 755 /var/run/dbus
-chown -R vncuser:vncuser /data/ff
+chown -R vncuser:vncuser /app/ff
 
 # 设置VNC密码
 echo "设置VNC密码..."
-echo "$VNC_PASSWORD" | x11vnc -storepasswd - > /data/ff/.vnc/passwd
-chmod 600 /data/ff/.vnc/passwd
+echo "$VNC_PASSWORD" | x11vnc -storepasswd - > /app/ff/.vnc/passwd
+chmod 600 /app/ff/.vnc/passwd
 
 # 清理旧的锁文件
 echo "清理旧的X11锁文件..."
 rm -f /tmp/.X0-lock /tmp/.X11-unix/X0 2>/dev/null || true
-rm -f /data/ff/.Xauthority 2>/dev/null || true
+rm -f /app/ff/.Xauthority 2>/dev/null || true
 
 # 解析分辨率
 IFS='x' read -ra RES <<< "$RESOLUTION"
@@ -49,10 +49,10 @@ VNC_DEPTH="24"
 echo "分辨率: ${VNC_WIDTH}x${VNC_HEIGHT}"
 
 # 创建Firefox配置目录和用户配置文件
-mkdir -p /data/ff/.mozilla/firefox/default
+mkdir -p /app/ff/.mozilla/firefox/default
 
 # # 创建Firefox首选项文件，设置中文和主页
-# cat > /data/ff/.mozilla/firefox/profiles.ini << EOF
+# cat > /app/ff/.mozilla/firefox/profiles.ini << EOF
 # [General]
 # StartWithLastProfile=1
 
@@ -64,7 +64,7 @@ mkdir -p /data/ff/.mozilla/firefox/default
 # EOF
 
 # 创建Fluxbox配置
-# cat > /data/ff/.fluxbox/init << EOF
+# cat > /app/ff/.fluxbox/init << EOF
 # session.screen0.workspaces: 1
 # session.screen0.workspacewarping: false
 # session.screen0.toolbar.visible: false
@@ -74,7 +74,7 @@ mkdir -p /data/ff/.mozilla/firefox/default
 # session.screen0.defaultDeco: NONE
 # EOF
 
-# cat > /data/ff/.fluxbox/startup << EOF
+# cat > /app/ff/.fluxbox/startup << EOF
 # #!/bin/bash
 # # Fluxbox启动脚本
 # # 设置中文环境
@@ -90,9 +90,9 @@ mkdir -p /data/ff/.mozilla/firefox/default
 # firefox --name=ff --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com &
 # EOF
 
-chmod +x /data/ff/.fluxbox/startup
-chown -R vncuser:vncuser /data/ff/.fluxbox
-chown -R vncuser:vncuser /data/ff/.mozilla
+chmod +x /app/ff/.fluxbox/startup
+chown -R vncuser:vncuser /app/ff/.fluxbox
+chown -R vncuser:vncuser /app/ff/.mozilla
 
 echo "🚀 启动Xvfb显示服务器..."
 # 启动Xvfb（显示服务器）
@@ -165,9 +165,9 @@ else
         echo "✅ Firefox 启动成功 (PID: $FIREFOX_PID)"
     else
         echo "❌ Firefox 启动失败"
-        if [ -f /data/ff/firefox.log ]; then
+        if [ -f /app/ff/firefox.log ]; then
             echo "Firefox 错误日志:"
-            cat /data/ff/firefox.log
+            cat /app/ff/firefox.log
         fi
     fi
 fi
