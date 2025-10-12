@@ -51,44 +51,44 @@ echo "分辨率: ${VNC_WIDTH}x${VNC_HEIGHT}"
 # 创建Firefox配置目录和用户配置文件
 mkdir -p /data/ff/.mozilla/firefox/default
 
-# 创建Firefox首选项文件，设置中文和主页
-cat > /data/ff/.mozilla/firefox/profiles.ini << EOF
-[General]
-StartWithLastProfile=1
+# # 创建Firefox首选项文件，设置中文和主页
+# cat > /data/ff/.mozilla/firefox/profiles.ini << EOF
+# [General]
+# StartWithLastProfile=1
 
-[Profile0]
-Name=default
-IsRelative=1
-Path=default
-Default=1
-EOF
+# [Profile0]
+# Name=default
+# IsRelative=1
+# Path=default
+# Default=1
+# EOF
 
 # 创建Fluxbox配置
-cat > /data/ff/.fluxbox/init << EOF
-session.screen0.workspaces: 1
-session.screen0.workspacewarping: false
-session.screen0.toolbar.visible: false
-session.screen0.fullMaximization: true
-session.screen0.maxDisableMove: false
-session.screen0.maxDisableResize: false
-session.screen0.defaultDeco: NONE
-EOF
+# cat > /data/ff/.fluxbox/init << EOF
+# session.screen0.workspaces: 1
+# session.screen0.workspacewarping: false
+# session.screen0.toolbar.visible: false
+# session.screen0.fullMaximization: true
+# session.screen0.maxDisableMove: false
+# session.screen0.maxDisableResize: false
+# session.screen0.defaultDeco: NONE
+# EOF
 
-cat > /data/ff/.fluxbox/startup << EOF
-#!/bin/bash
-# Fluxbox启动脚本
-# 设置中文环境
-export LANG=zh_CN.UTF-8
-export LANGUAGE=zh_CN:zh
-export LC_ALL=zh_CN.UTF-8
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+# cat > /data/ff/.fluxbox/startup << EOF
+# #!/bin/bash
+# # Fluxbox启动脚本
+# # 设置中文环境
+# export LANG=zh_CN.UTF-8
+# export LANGUAGE=zh_CN:zh
+# export LC_ALL=zh_CN.UTF-8
+# export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
 
-# 等待X服务器完全启动
-sleep 3
+# # 等待X服务器完全启动
+# sleep 3
 
-# 启动Firefox（不使用kiosk模式，使用普通模式）
-firefox --name=ff --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com &
-EOF
+# # 启动Firefox（不使用kiosk模式，使用普通模式）
+# firefox --name=ff --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com &
+# EOF
 
 chmod +x /data/ff/.fluxbox/startup
 chown -R vncuser:vncuser /data/ff/.fluxbox
