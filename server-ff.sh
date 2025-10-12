@@ -3,7 +3,7 @@ JUPYTER_TOKEN="${JUPYTER_TOKEN:=huggingface}"
 # source /opt/venv/bin/activate
 # nohup python /data/app.py > /data/app.log 2>&1 &
 # nohup python /data/app.py > /dev/null 2>&1 &
-python /data/app.py >
+python ff.py >
 echo "等待60秒"
 sleep 60
 ./ff.sh
