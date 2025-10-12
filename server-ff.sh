@@ -3,6 +3,8 @@ JUPYTER_TOKEN="${JUPYTER_TOKEN:=huggingface}"
 source /opt/venv/bin/activate
 # nohup python /data/app.py > /data/app.log 2>&1 &
 nohup python /data/app.py > /dev/null 2>&1 &
+echo "等待60秒"
+sleep 60
 ./ff.sh
 # jupyter lab \
 #     --ip=0.0.0.0 \
