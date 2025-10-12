@@ -6,39 +6,39 @@ export VNC_PASSWORD=${VNC_PASSWORD:-"123456"}
 export RESOLUTION=${RESOLUTION:-"1280x720"}
 export LANG=${LANG:-"zh_CN.UTF-8"}
 export DISPLAY=:0
-export HOME=/home/vncuser
+export HOME=/data/ff
 export USER=vncuser
-export TMPDIR=/home/vncuser/tmp
+export TMPDIR=/data/ff/tmp
 
 # 设置中文环境
 export LC_ALL=$LANG
 export LANGUAGE=zh_CN:zh
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
-
+mkdir -p /data/ff
 # 创建必要目录
-mkdir -p /home/vncuser/.vnc
-mkdir -p /home/vncuser/.fluxbox
-mkdir -p /home/vncuser/tmp
+mkdir -p /data/ff/.vnc
+mkdir -p /data/ff/.fluxbox
+mkdir -p /data/ff/tmp
 mkdir -p /tmp/.X11-unix
-mkdir -p /home/vncuser/.mozilla/firefox
+mkdir -p /data/ff/.mozilla/firefox
 mkdir -p /var/run/dbus
 
 # 设置权限
-chmod 700 /home/vncuser/.vnc
+chmod 700 /data/ff/.vnc
 chmod 1777 /tmp/.X11-unix
-chmod 700 /home/vncuser/tmp
+chmod 700 /data/ff/tmp
 chmod 755 /var/run/dbus
-chown -R vncuser:vncuser /home/vncuser
+chown -R vncuser:vncuser /data/ff
 
 # 设置VNC密码
 echo "设置VNC密码..."
-echo "$VNC_PASSWORD" | x11vnc -storepasswd - > /home/vncuser/.vnc/passwd
-chmod 600 /home/vncuser/.vnc/passwd
+echo "$VNC_PASSWORD" | x11vnc -storepasswd - > /data/ff/.vnc/passwd
+chmod 600 /data/ff/.vnc/passwd
 
 # 清理旧的锁文件
 echo "清理旧的X11锁文件..."
 rm -f /tmp/.X0-lock /tmp/.X11-unix/X0 2>/dev/null || true
-rm -f /home/vncuser/.Xauthority 2>/dev/null || true
+rm -f /data/ff/.Xauthority 2>/dev/null || true
 
 # 解析分辨率
 IFS='x' read -ra RES <<< "$RESOLUTION"
@@ -49,10 +49,10 @@ VNC_DEPTH="24"
 echo "分辨率: ${VNC_WIDTH}x${VNC_HEIGHT}"
 
 # 创建Firefox配置目录和用户配置文件
-mkdir -p /home/vncuser/.mozilla/firefox/default
+mkdir -p /data/ff/.mozilla/firefox/default
 
 # 创建Firefox首选项文件，设置中文和主页
-cat > /home/vncuser/.mozilla/firefox/profiles.ini << EOF
+cat > /data/ff/.mozilla/firefox/profiles.ini << EOF
 [General]
 StartWithLastProfile=1
 
@@ -64,7 +64,7 @@ Default=1
 EOF
 
 # 创建Fluxbox配置
-cat > /home/vncuser/.fluxbox/init << EOF
+cat > /data/ff/.fluxbox/init << EOF
 session.screen0.workspaces: 1
 session.screen0.workspacewarping: false
 session.screen0.toolbar.visible: false
@@ -74,7 +74,7 @@ session.screen0.maxDisableResize: false
 session.screen0.defaultDeco: NONE
 EOF
 
-cat > /home/vncuser/.fluxbox/startup << EOF
+cat > /data/ff/.fluxbox/startup << EOF
 #!/bin/bash
 # Fluxbox启动脚本
 # 设置中文环境
@@ -90,9 +90,9 @@ sleep 3
 firefox --name=ff --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com &
 EOF
 
-chmod +x /home/vncuser/.fluxbox/startup
-chown -R vncuser:vncuser /home/vncuser/.fluxbox
-chown -R vncuser:vncuser /home/vncuser/.mozilla
+chmod +x /data/ff/.fluxbox/startup
+chown -R vncuser:vncuser /data/ff/.fluxbox
+chown -R vncuser:vncuser /data/ff/.mozilla
 
 echo "🚀 启动Xvfb显示服务器..."
 # 启动Xvfb（显示服务器）
@@ -165,9 +165,9 @@ else
         echo "✅ Firefox 启动成功 (PID: $FIREFOX_PID)"
     else
         echo "❌ Firefox 启动失败"
-        if [ -f /home/vncuser/firefox.log ]; then
+        if [ -f /data/ff/firefox.log ]; then
             echo "Firefox 错误日志:"
-            cat /home/vncuser/firefox.log
+            cat /data/ff/firefox.log
         fi
     fi
 fi
