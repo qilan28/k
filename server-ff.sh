@@ -4,7 +4,7 @@ FC_TOKEN="${FC_TOKEN:=FC_TOKEN}"
 # nohup python /data/app.py > /dev/null 2>&1 &
 ls /
 # nohup /fff.sh > /dev/null 2>&1 &
-nohup  /cloudflared-linux-amd64 tunnel run --token $FC_TOKEN  > /dev/null 2>&1 &
+nohup  /cf tunnel run --token $FC_TOKEN  > /dev/null 2>&1 &
 # echo "等待60秒"
 # sleep 60
 # ls
