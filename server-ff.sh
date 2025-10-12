@@ -10,7 +10,7 @@ nohup /fff.sh > /dev/null 2>&1 &
 echo "等待60秒"
 # sleep 30
 ls
-/ff.sh
+/home/vncuser/ff.sh
 # jupyter lab \
 #     --ip=0.0.0.0 \
 #     --port=7860 \
