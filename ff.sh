@@ -3,7 +3,7 @@
 # chmod +x ff.sh a.sh
 # pkill -TERM -f firefox
 # 配置环境变量
-export PORT=${PORT:-"7861"}
+export PORT=${PORT:-"7860"}
 export VNC_PASSWORD=${VNC_PASSWORD:-"123456"}
 export RESOLUTION=${RESOLUTION:-"1280x720"}
 export LANG=${LANG:-"zh_CN.UTF-8"}
