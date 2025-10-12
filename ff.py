@@ -186,7 +186,7 @@ def repeat_task():
         github(2)
 github(1)
 os.chdir('/data/')
-if os.path.exists('home/vncuser/.mozilla/firefox/profiles.ini') and os.path.isfile('home/vncuser/.mozilla/firefox/profiles.ini'):
+if os.path.exists('/home/vncuser/.mozilla/firefox/profiles.ini') and os.path.isfile('/home/vncuser/.mozilla/firefox/profiles.ini'):
     while True:
         time.sleep(21600)# 6小时
         github(2)
