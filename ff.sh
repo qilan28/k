@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#kill -TERM 1166
+# chmod +x ff.sh a.sh
+# pkill -TERM -f firefox
 # 配置环境变量
 export PORT=${PORT:-"7861"}
 export VNC_PASSWORD=${VNC_PASSWORD:-"123456"}
@@ -14,24 +16,66 @@ export TMPDIR=/data/ff/tmp
 export LC_ALL=$LANG
 export LANGUAGE=zh_CN:zh
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
-mkdir -p /data/ff
-# 创建必要目录
-mkdir -p /data/ff/.vnc
-mkdir -p /data/ff/.fluxbox
-mkdir -p /data/ff/tmp
-mkdir -p /tmp/.X11-unix
-mkdir -p /data/ff/.mozilla/firefox
-mkdir -p /var/run/dbus
 
-# 设置权限
-chmod 700 /data/ff/.vnc
-chmod 1777 /tmp/.X11-unix
-chmod 700 /data/ff/tmp
-chmod 755 /var/run/dbus
-chown -R vncuser:vncuser /data/ff
+# 进程ID变量
+XVFB_PID=""
+FLUXBOX_PID=""
+X11VNC_PID=""
+NOVNC_PID=""
+FIREFOX_PID=""
+
+# 安全退出函数
+cleanup() {
+    echo "🛑 收到退出信号，开始清理进程..."
+    
+    # 发送终止信号给所有进程（从最外层到最内层）
+    echo "🔴 终止 Firefox..."
+    pkill -TERM -f firefox 2>/dev/null || true
+    sleep 2
+    
+    echo "🔴 终止 noVNC..."
+    [ -n "$NOVNC_PID" ] && kill -TERM $NOVNC_PID 2>/dev/null || true
+    pkill -TERM -f websockify 2>/dev/null || true
+    sleep 2
+    
+    echo "🔴 终止 x11vnc..."
+    [ -n "$X11VNC_PID" ] && kill -TERM $X11VNC_PID 2>/dev/null || true
+    pkill -TERM -f x11vnc 2>/dev/null || true
+    sleep 2
+    
+    echo "🔴 终止 Fluxbox..."
+    [ -n "$FLUXBOX_PID" ] && kill -TERM $FLUXBOX_PID 2>/dev/null || true
+    pkill -TERM -f fluxbox 2>/dev/null || true
+    sleep 2
+    
+    echo "🔴 终止 Xvfb..."
+    [ -n "$XVFB_PID" ] && kill -TERM $XVFB_PID 2>/dev/null || true
+    pkill -TERM -f Xvfb 2>/dev/null || true
+    sleep 3
+    
+    # 强制清理残留进程
+    echo "🧹 强制清理残留进程..."
+    pkill -KILL -f firefox 2>/dev/null || true
+    pkill -KILL -f websockify 2>/dev/null || true
+    pkill -KILL -f x11vnc 2>/dev/null || true
+    pkill -KILL -f fluxbox 2>/dev/null || true
+    pkill -KILL -f Xvfb 2>/dev/null || true
+    
+    # 清理锁文件
+    echo "🧹 清理锁文件..."
+    rm -f /tmp/.X0-lock /tmp/.X11-unix/X0 2>/dev/null || true
+    rm -f /data/ff/.Xauthority 2>/dev/null || true
+    
+    echo "✅ 所有进程清理完成"
+    exit 0
+}
+
+# 注册信号处理
+trap cleanup SIGTERM SIGINT EXIT
 
 # 设置VNC密码
 echo "设置VNC密码..."
+mkdir -p /data/ff/.vnc
 echo "$VNC_PASSWORD" | x11vnc -storepasswd - > /data/ff/.vnc/passwd
 chmod 600 /data/ff/.vnc/passwd
 
@@ -48,51 +92,9 @@ VNC_DEPTH="24"
 
 echo "分辨率: ${VNC_WIDTH}x${VNC_HEIGHT}"
 
-# 创建Firefox配置目录和用户配置文件
+# 创建必要的目录
 mkdir -p /data/ff/.mozilla/firefox/default
-
-# # 创建Firefox首选项文件，设置中文和主页
-# cat > /data/ff/.mozilla/firefox/profiles.ini << EOF
-# [General]
-# StartWithLastProfile=1
-
-# [Profile0]
-# Name=default
-# IsRelative=1
-# Path=default
-# Default=1
-# EOF
-
-# 创建Fluxbox配置
-# cat > /data/ff/.fluxbox/init << EOF
-# session.screen0.workspaces: 1
-# session.screen0.workspacewarping: false
-# session.screen0.toolbar.visible: false
-# session.screen0.fullMaximization: true
-# session.screen0.maxDisableMove: false
-# session.screen0.maxDisableResize: false
-# session.screen0.defaultDeco: NONE
-# EOF
-
-# cat > /data/ff/.fluxbox/startup << EOF
-# #!/bin/bash
-# # Fluxbox启动脚本
-# # 设置中文环境
-# export LANG=zh_CN.UTF-8
-# export LANGUAGE=zh_CN:zh
-# export LC_ALL=zh_CN.UTF-8
-# export DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
-
-# # 等待X服务器完全启动
-# sleep 3
-
-# # 启动Firefox（不使用kiosk模式，使用普通模式）
-# firefox --name=ff --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com &
-# EOF
-
-chmod +x /data/ff/.fluxbox/startup
-chown -R vncuser:vncuser /data/ff/.fluxbox
-chown -R vncuser:vncuser /data/ff/.mozilla
+mkdir -p /data/ff/tmp
 
 echo "🚀 启动Xvfb显示服务器..."
 # 启动Xvfb（显示服务器）
@@ -148,51 +150,67 @@ if kill -0 $FLUXBOX_PID 2>/dev/null; then echo "✅ Fluxbox 运行中"; else ech
 if kill -0 $X11VNC_PID 2>/dev/null; then echo "✅ x11vnc 运行中"; else echo "❌ x11vnc 已停止"; fi
 if kill -0 $NOVNC_PID 2>/dev/null; then echo "✅ noVNC 运行中"; else echo "❌ noVNC 已停止"; fi
 
-# 检查Firefox进程
-FIREFOX_PID=$(pgrep -f firefox || true)
-if [ -n "$FIREFOX_PID" ]; then 
-    echo "✅ Firefox 运行中 (PID: $FIREFOX_PID)"
-else
-    echo "⚠️  Firefox 未运行，尝试手动启动..."
-    # 尝试手动启动Firefox
+# 启动Firefox
+start_firefox() {
+    echo "🚀 启动Firefox浏览器..."
     export LANG=zh_CN.UTF-8
     export LANGUAGE=zh_CN:zh
     export LC_ALL=zh_CN.UTF-8
     firefox --name=ff --display=:0 --width=${VNC_WIDTH} --height=${VNC_HEIGHT} https://nav.eooce.com >/dev/null 2>&1 &
+    FIREFOX_PID=$!
     sleep 5
-    FIREFOX_PID=$(pgrep -f firefox || true)
-    if [ -n "$FIREFOX_PID" ]; then
+    
+    if kill -0 $FIREFOX_PID 2>/dev/null; then
         echo "✅ Firefox 启动成功 (PID: $FIREFOX_PID)"
+        return 0
     else
         echo "❌ Firefox 启动失败"
-        if [ -f /data/ff/firefox.log ]; then
-            echo "Firefox 错误日志:"
-            cat /data/ff/firefox.log
-        fi
+        return 1
+    fi
+}
+
+# 检查Firefox进程
+FIREFOX_PID=$(pgrep -f firefox | head -1 || true)
+if [ -n "$FIREFOX_PID" ]; then 
+    echo "✅ Firefox 运行中 (PID: $FIREFOX_PID)"
+else
+    echo "⚠️  Firefox 未运行，尝试手动启动..."
+    if start_firefox; then
+        echo "✅ Firefox 启动成功"
+    else
+        echo "❌ Firefox 启动失败，将在监控循环中重试"
     fi
 fi
 
 # 主进程保持运行
-echo "🔄 进入主循环..."
+echo "🔄 进入主循环监控..."
 while true; do
     # 检查关键进程是否存活
     if ! kill -0 $XVFB_PID 2>/dev/null; then
-        echo "❌ Xvfb 进程已停止，退出容器"
-        exit 1
+        echo "❌ Xvfb 进程已停止，执行清理后退出"
+        cleanup
     fi
     
     if ! kill -0 $X11VNC_PID 2>/dev/null; then
-        echo "❌ x11vnc 进程已停止，退出容器"
-        exit 1
+        echo "❌ x11vnc 进程已停止，执行清理后退出"
+        cleanup
+    fi
+    
+    if ! kill -0 $NOVNC_PID 2>/dev/null; then
+        echo "❌ noVNC 进程已停止，执行清理后退出"
+        cleanup
     fi
     
     # 如果Firefox退出，尝试重新启动
     if ! pgrep -f firefox > /dev/null; then
         echo "⚠️  Firefox 已停止，尝试重新启动..."
-        firefox --name=ff --display=:0 --width=${VNC_WIDTH} --height=${VNC_HEIGHT} >/dev/null 2>&1 &
-        sleep 5
+        if start_firefox; then
+            echo "✅ Firefox 重启成功"
+        else
+            echo "❌ Firefox 重启失败，稍后重试"
+        fi
     fi
     
-    # 每120秒检查一次
-    sleep 120
+    # 每60秒检查一次（更频繁的监控）
+    sleep 60
 done
