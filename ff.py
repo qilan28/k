@@ -121,7 +121,7 @@ def github(type):
         os.system(git)
         os.system(f'git config --global user.email "{HF_EMAIL}"')
         os.system(f'git config --global user.name "{HF_USER1}"') 
-        os.system(ls)
+        os.system("ls")
         latest_package = get_latest_local_package(f'/data/{HF_REPO}')
         print(f"最新压缩包路径: {latest_package}")
         # tar -xzvf /data/firefox/1760199222945.tar.gz -C /data
