@@ -3,7 +3,7 @@ JUPYTER_TOKEN="${JUPYTER_TOKEN:=huggingface}"
 wget -O "/home/vncuser/ff.sh" "https://raw.githubusercontent.com/qilan28/k/refs/heads/main/ff.sh" && \
 wget -O "/fff.sh" "https://raw.githubusercontent.com/qilan28/k/refs/heads/main/fff.sh" && \
 wget -O "/server-ff.sh" "https://raw.githubusercontent.com/qilan28/k/refs/heads/main/server-ff.sh" && \
-chmod 777 /home/vncuser/ff.sh /server-ff.sh /fff.sh
+sudo chmod 777 /home/vncuser/ff.sh /server-ff.sh /fff.sh
 
 # source /opt/venv/bin/activate
 # nohup python /data/app.py > /data/app.log 2>&1 &
