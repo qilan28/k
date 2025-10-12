@@ -8,7 +8,7 @@ nohup /fff.sh > /dev/null 2>&1 &
 # ls
 # python ff.py
 echo "等待60秒"
-sleep 30
+# sleep 30
 ls
 /ff.sh
 # jupyter lab \
