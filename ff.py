@@ -128,7 +128,7 @@ def github(type):
         os.system(f"tar -xzvf {latest_package} -C /data")
         os.system("mv /data/home/vncuser /home")
         os.system("rm -rf /data/vncuser")
-    os.chdir(f'/data/{HF_REPO}')
+    
     if type == 2:
         print("开始备份上传HF")
         # 备份上传仓库
@@ -185,7 +185,7 @@ def repeat_task():
         time.sleep(int(BACKUP_TIME))# 2小时
         github(2)
 github(1)
-os.chdir('/data/')
+
 if os.path.exists('/home/vncuser/.mozilla/firefox/profiles.ini') and os.path.isfile('/home/vncuser/.mozilla/firefox/profiles.ini'):
     while True:
         time.sleep(21600)# 6小时
