@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 环境变量设置
-BACKUP_TIME=${BACKUP_TIME:-"120"}
+BACKUP_TIME=${BACKUP_TIME:-"1200"}
 HF_USER1=${HF_USER1:-""}
 HF_REPO=${HF_REPO:-""}
 HF_EMAIL=${HF_EMAIL:-""}
