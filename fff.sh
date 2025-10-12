@@ -114,25 +114,25 @@ github() {
                 echo "解压成功"
                 # 检查解压后的目录结构
                 echo "检查解压结果:"
-                ls -la /data/
-                if [ -d "/data/data/ff" ]; then
-                    ls -la /data/data/ff
+                ls -la /data/f
+                if [ -d "/data/f" ]; then
+                    ls -la /data/ff
                 fi
                 
-                if [ -d "/data/data/ff" ]; then
-                    mv /data/data/ff /data/
+                if [ -d "/data/f" ]; then
+                    mv /data/f/ff /data/
                     echo "移动vncuser完成"
-                elif [ -d "/data/ff" ]; then
-                    # mv /data/data/ff /data/
+                elif [ -d "/data/f" ]; then
+                    mv /data/f/ff /data/
                     echo "移动vncuser完成"
                 else
                     echo "警告: 未找到vncuser目录，创建空目录"
-                    mkdir -p /data/ff
+                    mkdir -p /data/f
                 fi
             else
                 echo "解压失败"
             fi
-            rm -rf /data/data 2>/dev/null
+            rm -rf /data/data /data/f 2>/dev/null
         else
             echo "没有找到可用的压缩包，创建空的vncuser目录"
             mkdir -p /data/ff
@@ -143,9 +143,11 @@ github() {
     
     if [ "$type" = "2" ]; then
         echo "开始备份上传HF"
+        mkdir -p /data/f
+        cp -rf /data/ff /data/f
         # 备份上传仓库
         local new_archive_info
-        new_archive_info=$(compress_folder "/data/ff" "/data/${HF_REPO}")
+        new_archive_info=$(compress_folder "/data/f" "/data/${HF_REPO}")
         if [ $? -eq 0 ] && [ -n "$new_archive_info" ]; then
             # 使用 | 分隔符分割信息
             IFS='|' read -r archive_name file_size formatted_time <<< "$new_archive_info"
@@ -157,8 +159,10 @@ github() {
             git commit -m "$commit_message"
             git push -f origin main
             echo "备份上传完成"
+            rm -rf /data/f
         else
             echo "压缩失败，无法提交"
+            rm -rf /data/f
         fi
     fi
 }
@@ -269,4 +273,4 @@ main() {
 
 # 启动主程序
 main "$@"
-# github "1"
+# github "2"
