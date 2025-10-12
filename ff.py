@@ -125,9 +125,9 @@ def github(type):
         latest_package = get_latest_local_package(f'/data/{HF_REPO}')
         print(f"最新压缩包路径: {latest_package}")
         # tar -xzvf /data/firefox/1760199222945.tar.gz -C /data
-        # os.system(f"tar -xzvf {latest_package} -C /data")
-        # os.system("mv /data/home/vncuser /home")
-        # os.system("rm -rf /data/vncuser")
+        os.system(f"tar -xzvf {latest_package} -C /data")
+        os.system("mv /data/home/vncuser /home")
+        os.system("rm -rf /data/vncuser")
     os.chdir(f'/data/{HF_REPO}')
     if type == 2:
         print("开始备份上传HF")
