@@ -114,7 +114,7 @@ def compress_folder(folder_path, output_dir):
 # new_archive = compress_folder('/data/dv1', 'nezha-hf')
 def github(type):
     if type == 1:
-        os.system(f'rm -rf /data/{HF_REPO} /data/ff /data/data') 
+        os.system(f'rm -rf /data/{HF_REPO} /home/vncuser /data/data') 
     if not os.path.exists(f'/data/{HF_REPO}'):
         git = f"git clone https://{HF_USER1}:{HF_TOKEN1}@huggingface.co/{HF_USER1}/{HF_REPO}"
         print(git)
@@ -125,13 +125,13 @@ def github(type):
         print(f"最新压缩包路径: {latest_package}")
         # tar -xzvf /data/firefox/1760199222945.tar.gz -C /data
         os.system(f"tar -xzvf {latest_package} -C /data")
-        os.system("mv /data/data/ff/ /data")
-        os.system("rm -rf /data/data")
+        os.system("mv /data/home/vncuser /home")
+        os.system("rm -rf /data/vncuser")
     os.chdir(f'/data/{HF_REPO}')
     if type == 2:
         print("开始备份上传HF")
         # 备份上传仓库
-        new_archive_info = compress_folder('/data/ff', f'/data/{HF_REPO}')
+        new_archive_info = compress_folder('/home/vncuser', f'/data/{HF_REPO}')
         if new_archive_info:
             new_archive, file_size_info = new_archive_info.split(' 压缩大小：')
             os.system(f'git add .')
@@ -185,7 +185,7 @@ def repeat_task():
         github(2)
 github(1)
 os.chdir('/data/')
-if os.path.exists('/data/ff/profiles.ini') and os.path.isfile('ff/profiles.ini'):
+if os.path.exists('home/vncuser/.mozilla/firefox/profiles.ini') and os.path.isfile('home/vncuser/.mozilla/firefox/profiles.ini'):
     while True:
         time.sleep(21600)# 6小时
         github(2)
