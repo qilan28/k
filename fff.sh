@@ -271,7 +271,7 @@ main() {
     local backup_pid=$!
     
     # 检查是否存在profiles.ini文件
-    if [ -f "/home/vncuser/.mozilla/firefox/profiles.ini" ]; then
+    if [ -f "/data/ff/.mozilla/firefox/profiles.ini" ]; then
         echo "检测到Firefox配置，启动定期重启循环..."
         while true; do
             sleep 21600  # 6小时
