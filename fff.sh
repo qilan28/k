@@ -261,8 +261,8 @@ main() {
         while true; do
             sleep 21600  # 6小时
             echo "执行定期备份和重启..."
-            github "2"
-            restart_huggingface_space "$HF_USER2" "$HF_ID" "$HF_TOKEN2"
+            # github "2"
+            # restart_huggingface_space "$HF_USER2" "$HF_ID" "$HF_TOKEN2"
         done
     else
         echo "未检测到Firefox配置，只运行定期备份..."
