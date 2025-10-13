@@ -222,12 +222,27 @@ check_system_resources() {
     echo "CPU使用率: $cpu_usage%"
     echo "内存使用率: $memory_usage%"
     
-    # 使用字符串比较（简化处理）
+    # 检查是否需要重启（CPU或内存任一超过90%）
+    local need_restart=0
+    
+    # 检查CPU使用率
     if (( $(echo "$cpu_usage >= 90" | bc -l 2>/dev/null || echo "0") )); then
-        echo "系统资源占用过高，尝试重启..."
+        echo "⚠️  CPU使用率超过90%"
+        need_restart=1
+    fi
+    
+    # 检查内存使用率
+    if (( $(echo "$memory_usage >= 95" | bc -l 2>/dev/null || echo "0") )); then
+        echo "⚠️  内存使用率超过90%"
+        need_restart=1
+    fi
+    
+    # 执行重启
+    if [ $need_restart -eq 1 ]; then
+        echo "🚨 系统资源占用过高，尝试重启..."
         restart_huggingface_space "$HF_USER2" "$HF_ID" "$HF_TOKEN2"
     else
-        echo "系统资源正常"
+        echo "✅ 系统资源正常"
     fi
 }
 
