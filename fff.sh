@@ -47,7 +47,7 @@ compress_folder() {
     local existing_archives=($(ls -t ${output_dir}/*.tar.gz 2>/dev/null))
     
     # 如果压缩包数量超过3个，删除最旧的
-    if [ ${#existing_archives[@]} -ge 3 ]; then
+    if [ ${#existing_archives[@]} -ge 2 ]; then
         # 删除最旧的（列表最后一个）
         local oldest_archive="${existing_archives[${#existing_archives[@]}-1]}"
         rm -f "$oldest_archive"
