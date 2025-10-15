@@ -18,7 +18,9 @@ ls /
 #     --ServerApp.token="$JUPYTER_TOKEN" \
 #     --ServerApp.disable_check_xsrf=True
 # /fff.sh
-nohup /fff.sh > /dev/null 2>&1 &
+# nohup /fff.sh > /dev/null 2>&1 &
+nohup /fff.sh > /data/fff.log 2>&1 &
+
 echo "等待 profiles.ini 文件出现..."
 
 # 设置最大等待时间和计数器
@@ -42,6 +44,8 @@ while [ $elapsed -lt $max_wait ]; do
         ls /data/ff/.mozilla/
         echo "/data/ff/.mozilla/firefox"
         ls /data/ff/.mozilla/firefox/
+        echo "----fff日志---"
+        cat /data/fff.log
         sleep $wait_interval
         elapsed=$((elapsed + wait_interval))
     fi
