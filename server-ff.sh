@@ -34,6 +34,7 @@ while [ $elapsed -lt $max_wait ]; do
         break
     else
         echo "⏳ 等待 profiles.ini 文件... (已等待 ${elapsed}秒)"
+        ls /data/ff/.mozilla/firefox/
         sleep $wait_interval
         elapsed=$((elapsed + wait_interval))
     fi
