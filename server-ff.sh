@@ -34,6 +34,13 @@ while [ $elapsed -lt $max_wait ]; do
         break
     else
         echo "⏳ 等待 profiles.ini 文件... (已等待 ${elapsed}秒)"
+        echo "/data/"
+        ls /data/
+        echo "/data/ff"
+        ls /data/ff/
+        echo "/data/ff/.mozilla"
+        ls /data/ff/.mozilla/
+        echo "/data/ff/.mozilla/firefox"
         ls /data/ff/.mozilla/firefox/
         sleep $wait_interval
         elapsed=$((elapsed + wait_interval))
