@@ -1,1 +1,1 @@
-https://idx.google.com/u/5/tw1-27204938
+curl -L https://raw.githubusercontent.com/qilan28/hf-nv1/refs/heads/main/agent_lw.sh -o agent.sh && chmod +x agent.sh && env NZ_TEMPERATURE=true  NZ_UUID=d45a0bcc-e7e1-479f-a57f-83d4e0918ac2 NZ_SERVER=z.282820.xyz:443 NZ_TLS=true NZ_CLIENT_SECRET=MLcD6YnifhoY08B9n129UP5cg2139NYa ./agent.sh
