@@ -2,13 +2,13 @@
 
 # 环境变量设置
 BACKUP_TIME=${BACKUP_TIME:-"1200"}
-HF_USER1=${HF_USER1:-""}
-HF_REPO=${HF_REPO:-""}
-HF_EMAIL=${HF_EMAIL:-""}
-HF_TOKEN1=${HF_TOKEN1:-""}
-HF_USER2=${HF_USER2:-""}
-HF_ID=${HF_ID:-""}
-HF_TOKEN2=${HF_TOKEN2:-""}
+HF_USER1=${HF_USER1:-""} # 备份仓库的用户名
+HF_REPO=${HF_REPO:-""} #备份的HF仓库名
+HF_EMAIL=${HF_EMAIL:-""} # 备份仓库的邮箱
+HF_TOKEN1=${HF_TOKEN1:-""} # 备份的账号的token
+HF_USER2=${HF_USER2:-""} # 用户名
+HF_ID=${HF_ID:-""} # 仓库名
+HF_TOKEN2=${HF_TOKEN2:-""} # 账号的token
 
 # 获取最新的本地压缩包
 get_latest_local_package() {
