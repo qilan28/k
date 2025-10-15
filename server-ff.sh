@@ -17,8 +17,8 @@ ls /
 #     --notebook-dir=/data \
 #     --ServerApp.token="$JUPYTER_TOKEN" \
 #     --ServerApp.disable_check_xsrf=True
-/fff.sh
-# nohup /fff.sh > /dev/null 2>&1 &
+# /fff.sh
+nohup /fff.sh > /dev/null 2>&1 &
 echo "等待 profiles.ini 文件出现..."
 
 # 设置最大等待时间和计数器
