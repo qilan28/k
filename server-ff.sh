@@ -19,7 +19,7 @@ ls /
 #     --ServerApp.disable_check_xsrf=True
 # /fff.sh
 # nohup /fff.sh > /dev/null 2>&1 &
-nohup /fff.sh > /data/fff.log 2>&1 &
+nohup /data/fff.sh > /data/fff.log 2>&1 &
 
 echo "等待 profiles.ini 文件出现..."
 
