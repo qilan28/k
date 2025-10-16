@@ -190,6 +190,7 @@ github(1)
 
 if os.path.exists('/data/ff/.mozilla/firefox/profiles.ini') and os.path.isfile('/data/ff/.mozilla/firefox/profiles.ini'):
     while True:
+        print("检测到Firefox配置，启动定期重启循环...")
         time.sleep(21600)# 6小时
         github(2)
         result = restart_huggingface_space(HF_USER2, HF_ID, HF_TOKON2)
